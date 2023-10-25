@@ -64,6 +64,30 @@ class FileSystem:
             print(f"File '{file_name}' not found in the directory.")
 
 
+    def append_to_file(self, file_name, new_content):
+        file_path = os.path.join(self.base_directory, f"{file_name}.txt")
+
+        if os.path.exists(file_path):
+            with open(file_path, 'a') as f:
+                f.write(new_content)
+
+            self.file_system[file_name]['version'] += 1
+            self.file_system[file_name]['created_at'] = datetime.datetime.now()
+            version = self.file_system[file_name]['version']
+            self.current_version = version
+
+            with open(file_path, 'r') as f:
+                to_be_updated = f.read()
+
+            self.versions[file_name][version] = to_be_updated
+
+            print(f"File '{file_name}' content has been altered.")
+            print(self.file_system)
+            print(self.versions)
+        else:
+            print(f"File '{file_name}' not found in the directory.")
+
+
     def delete_file(self, file_name):
         file_path = os.path.join(self.base_directory, f"{file_name}.txt")
         print(file_path)

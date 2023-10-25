@@ -11,7 +11,8 @@ def main():
         print("5. Revert to Version")
         print("6. Copy File")
         print("7. Move File")
-        print("8. Quit")
+        print("8. Append To File")
+        print("9. Quit")
 
         choice = input("Enter your choice: ")
 
@@ -42,6 +43,10 @@ def main():
             new_path = input("Enter the destination path: ")
             fs.move_file(file_name, new_path)
         elif choice == "8":
+            file_name = input("Enter the file name: ")
+            new_content = input("Enter the new content which is to be appended: ")
+            fs.append_to_file(file_name, new_content)
+        elif choice =='9':
             break
         else:
             print("Invalid choice. Please select a valid option.")
