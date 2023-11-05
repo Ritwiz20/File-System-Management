@@ -20,6 +20,11 @@ class FileSystem:
             print("File System : ", self.file_system[file_name])
             print("Versions : ", self.versions[file_name])
             print("Current Version : ", self.file_system[file_name]['version'])
+
+            file_system_details = f"File System : {self.file_system[file_name]}\n"
+            versions_details = f"Versions : {self.versions[file_name]}\n"
+            current_version_details = f"Current Version : {self.file_system[file_name]['version']}\n"
+            return file_system_details + versions_details + current_version_details
         else:
             print("File doesn't exist.")
             
@@ -101,22 +106,44 @@ class FileSystem:
             print("No such file found to delete.")
 
     
+    # def revert_to_version(self, file_name, version_number):
+    #     file_path = os.path.join(self.base_directory, f"{file_name}.txt")
+    #     print(file_path)
+
+    #     if os.path.exists(file_path):
+    #         updated_content = self.versions[file_name][version_number]
+    #         print(updated_content)
+
+    #         with open(file_path, 'w') as f:
+    #             f.write(updated_content)
+    #             print(f"File {file_name} has been reverted to version {version_number}")
+
+    #         self.file_system[file_name]['version'] = version_number
+    #         self.file_system[file_name]['created_at'] = datetime.datetime.now()
+    #     else:
+    #         print("File not found")
+
+
     def revert_to_version(self, file_name, version_number):
+
         file_path = os.path.join(self.base_directory, f"{file_name}.txt")
-        print(file_path)
 
         if os.path.exists(file_path):
-            updated_content = self.versions[file_name][version_number]
-            print(updated_content)
-
-            with open(file_path, 'w') as f:
-                f.write(updated_content)
-                print(f"File {file_name} has been reverted to version {version_number}")
-
-            self.file_system[file_name]['version'] = version_number
-            self.file_system[file_name]['created_at'] = datetime.datetime.now()
+            try:
+                if self.versions[file_name][version_number]:
+                    load_content = self.versions[file_name][version_number]  
+            except KeyError:
+                print(f"For the file {file_name}, there is no version {version_number}, Try another version number")
+            else:
+                with open(file_path, 'w') as f:
+                    f.write(load_content)
+                    
+                self.file_system[file_name]['version'] = version_number
+                self.file_system[file_name]['created_at'] = datetime.datetime.now()
+                print(f"{file_name} has been reverted back to version {version_number}")     
         else:
-            print("File not found")
+            print(f"{file_name} not found")
+
 
 
     def copy_file(self, file_name, new_path):
